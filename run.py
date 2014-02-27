@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import soccer_night
 from getpass import getpass
 
