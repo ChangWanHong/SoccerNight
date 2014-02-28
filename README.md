@@ -1,7 +1,7 @@
 SoccerNight
 ===========
 
-Macro for Foo**all *ay.
+Macro for Foo\*\*all \*ay.
 
 
 Installation
