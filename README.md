@@ -16,13 +16,14 @@ Requirement
 
 * selenium
 > sudo easy_install selenium   OR  sudo pip install selenium
-* selenium driver server
-> http://selenium.googlecode.com/svn/trunk/docs/api/py/index.html#java-server
+
+* Download chromedriver and locate it environment path
+> https://code.google.com/p/selenium/wiki/ChromeDriver#Chrome_Driver
 
 Run
 ------------
 Version for distribution is not ready, yet. so, set this python moudle path manually.
 
-* export PYTHONPATH=$PYTHONPATH:[path of directory which has soccer_night.py]
+> export PYTHONPATH=$PYTHONPATH:[path of directory which has soccer_night.py]
 
-* ./run.py
+> ./run.py
