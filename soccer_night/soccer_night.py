@@ -30,7 +30,7 @@ class SoccerNight(object):
 
     def go_schedule(self, from_popup=False):
         if not from_popup:
-            self.driver.get("http://fd.naver.com/gmc/main#home")
+            self.driver.get("http://fd.naver.com/gmc/main#schedule")
         else:
             wait = WebDriverWait(self.driver, 10)
             wait.until(expected_conditions.element_to_be_clickable((By.CLASS_NAME, self.BUTTON_CHECK_RESULT)))
