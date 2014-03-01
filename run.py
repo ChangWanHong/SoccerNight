@@ -1,4 +1,6 @@
 #!/usr/bin/python
+import os, sys
+sys.path.append(os.path.join(os.getcwd(), "soccer_night"))
 
 import soccer_night
 from getpass import getpass

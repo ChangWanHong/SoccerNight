@@ -22,8 +22,5 @@ Requirement
 
 Run
 ------------
-Version for distribution is not ready, yet. so, set this python moudle path manually.
-
-> export PYTHONPATH=$PYTHONPATH:[path of directory which has soccer_night.py]
 
 > ./run.py
