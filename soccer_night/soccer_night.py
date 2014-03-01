@@ -13,13 +13,23 @@ class SoccerNight(object):
     BUTTON_CHECK_RESULT_CLASS = "btn_ty3"
     POPUP_CONFIRM_RESULT_ID = "a_popup_ok"
 
+    # Friendly match
     FRIENDLY_ACTIVE_MATCH_CLASS = "_matchList"
     BUTTON_RUN_FRIENDLY_MATCH_CLASS = "sp_dm btn_chall ty2"
     MY_SCORE_XPATH = "//dd[@class='score_r']/span/span"
     PC_SCORE_XPATH = "//dd[@class='score_l']/span/span"
     PLAYING_TIME_XPATH = "//dl[@class='end_time']/dd"
     BUTTON_QUIT_MATCH_CLASS = "btn_out"
+    # It is also attendance reward and world tour result.
     GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS = "btn_p_ty6"
+
+    # Season results
+    BUTTON_SEASON_RESULT_NEXT_CLASS = "btn_p_pg2 next"
+    BUTTON_SEASON_RESULT_OK_CLASS = "btn_p_ty1 wd63"
+
+    # Challenge to friend
+    CHALLENGE_FRIEND_CLASS = "rst clg"
+
 
     def __init__(self, id, pw):
         self.driver = webdriver.Chrome()
