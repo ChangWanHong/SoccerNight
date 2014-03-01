@@ -13,6 +13,14 @@ class SoccerNight(object):
     BUTTON_CHECK_RESULT_CLASS = "btn_ty3"
     POPUP_CONFIRM_RESULT_ID = "a_popup_ok"
 
+    FRIENDLY_ACTIVE_MATCH_CLASS = "_matchList"
+    BUTTON_RUN_FRIENDLY_MATCH_CLASS = "sp_dm btn_chall ty2"
+    MY_SCORE_XPATH = "//dd[@class='score_r']/span/span"
+    PC_SCORE_XPATH = "//dd[@class='score_l']/span/span"
+    PLAYING_TIME_XPATH = "//dl[@class='end_time']/dd"
+    BUTTON_QUIT_MATCH_CLASS = "btn_out"
+    GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS = "btn_p_ty6"
+
     def __init__(self, id, pw):
         self.driver = webdriver.Chrome()
         self.driver.get("http://fd.naver.com/gmc/main#home")
