@@ -10,8 +10,8 @@ class SoccerNight(object):
 
     driver = None
 
-    BUTTON_CHECK_RESULT = "btn_ty3"
-    POPUP_CONFIRM_RESULT = "a_popup_ok"
+    BUTTON_CHECK_RESULT_CLASS = "btn_ty3"
+    POPUP_CONFIRM_RESULT_ID = "a_popup_ok"
 
     def __init__(self, id, pw):
         self.driver = webdriver.Chrome()
@@ -33,9 +33,9 @@ class SoccerNight(object):
             self.driver.get("http://fd.naver.com/gmc/main#schedule")
         else:
             wait = WebDriverWait(self.driver, 10)
-            wait.until(expected_conditions.element_to_be_clickable((By.CLASS_NAME, self.BUTTON_CHECK_RESULT)))
+            wait.until(expected_conditions.element_to_be_clickable((By.CLASS_NAME, self.BUTTON_CHECK_RESULT_CLASS)))
 
-        check_buttons = self.driver.find_elements_by_class_name(self.BUTTON_CHECK_RESULT)
+        check_buttons = self.driver.find_elements_by_class_name(self.BUTTON_CHECK_RESULT_CLASS)
         for check_button in check_buttons:
             check_button.click()
 
@@ -63,7 +63,7 @@ class SoccerNight(object):
 
     def confirm_league_match_results(self):
         try:
-            elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_RESULT)
+            elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_RESULT_ID)
         except:
             pass
         else:
