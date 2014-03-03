@@ -33,7 +33,8 @@ class SoccerNight(object):
     BUTTON_RUN_DAILY_MATCH_CSS = ".sp_dm.btn_chall.ty2"
 
     # World tour
-    BUTTON_RUN_WORLD_TOUR_CSS = ".sp_dm.btn_chall"
+    BUTTON_WORLD_TOUR_NATION_IN_PROGRESS_CSS = ".over > span > a"
+    BUTTON_RUN_WORLD_TOUR_ID = "a_wt_challengebtn"
 
     # Friendly common
     GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS = "btn_p_ty6"
@@ -73,7 +74,10 @@ class SoccerNight(object):
         if not from_popup:
             self.driver.get("http://fd.naver.com/gmc/main#schedule")
         else:
-            self.wait.until(expected_conditions.element_to_be_clickable((By.CLASS_NAME, self.BUTTON_CHECK_RESULT_CLASS)))
+            try:
+                self.wait.until(expected_conditions.element_to_be_clickable((By.CLASS_NAME, self.BUTTON_CHECK_RESULT_CLASS)))
+            except:
+                pass
 
         # For leeds time card.
         if (self.__is_sunday()):
@@ -135,11 +139,11 @@ class SoccerNight(object):
                 while True:
                     playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
                     playingTime, _ = playingTimeText.split(":")
-                    me = int(self.driver.execute_script(self.MY_SCORE_JS))
-                    pc = int(self.driver.execute_script(self.PC_SCORE_JS))
                     if (int(playingTime) > 90):
                         if (not self.__is_my_score_more_than_pc(1)):
-                            self.driver.find_element_by_class_name(self.BUTTON_QUIT_MATCH_CLASS)
+                            # These clicks may not be needed because return statement makes it to enter daily match again.
+                            self.driver.find_element_by_class_name(self.BUTTON_QUIT_MATCH_CLASS).click()
+                            self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
                             return
 
                         if (self.__confirm_friendly_match_result()):
@@ -147,15 +151,52 @@ class SoccerNight(object):
                             return
 
     def go_world_tour(self):
+        # For next nation popup. Reward for clearing nation.
+        try:
+            elem = self.driver.find_element_by_class_name(self.GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS)
+            elem.click()
+        except:
+            pass
+
         # FIXME: At 24 o'clock, we should refresh this.
         if (self.world_tour_remain == 0):
             return
 
         self.driver.get("http://fd.naver.com/gmc/main#worldtour")
-        #self.driver.find_element_by_xpath("//div[@class='over']/span/a").click()
-        self.driver.find_element_by_css_selector(".over > span > a").click()
-        self.world_tour_remain = 0
-        #TODO: Start world tour.
+
+        # At, not first time in world tour, the nation selection is skipped.
+        # We are in page where club is chosen already.
+        try:
+            self.driver.find_element_by_css_selector(self.BUTTON_WORLD_TOUR_NATION_IN_PROGRESS_CSS).click()
+        except:
+            pass
+
+        try:
+            self.wait.until(expected_conditions.element_to_be_clickable((By.ID, self.BUTTON_RUN_WORLD_TOUR_ID)))
+            button_run = self.driver.find_element_by_id(self.BUTTON_RUN_WORLD_TOUR_ID)
+        except:
+            self.world_tour_remain = 0
+            return
+        else:
+            button_run.click()
+            self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
+
+        if (self.confirm_league_match_results()):
+            return
+
+        while True:
+            playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
+            playingTime, _ = playingTimeText.split(":")
+            if (int(playingTime) > 90):
+                if (not self.__is_my_score_more_than_pc(3)):
+                    # These clicks may not be needed because return statement makes it to enter world tour again.
+                    self.driver.find_element_by_class_name(self.BUTTON_QUIT_MATCH_CLASS).click()
+                    self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
+                    return
+
+                if (self.__confirm_friendly_match_result()):
+                    self.daily_match_remain -= 1
+                    return
 
     # It will be used densly..
     def confirm_league_match_results(self):
