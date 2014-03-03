@@ -26,6 +26,15 @@ class SoccerNight(object):
     BUTTON_CHECK_RESULT_CLASS = "btn_ty3"
     POPUP_CONFIRM_ID = "a_popup_ok"
 
+    # Home
+    NEWS_ONE_HEAD_LINE_CSS = "#news_home_box > ._news_title > a"
+    NEWS_TITLE_LISTS_CSS = "._current_list"
+    NEWS_TITLE_LISTS_READ_CSS = ".read._current_list"
+    NEWS_NEXT_PAGE = ".pagin > .btn.next"
+    NEWS_GET_REWARD = ".btn_get"
+    NEWS_CLOSE_CSS = "#news_close > a"
+    CHALLENGE_FRIEND_CLASS = "rst clg"
+
     # Daily match
     DAILY_MATCH_ACTIVATED_CSS = "._matchList"
     DAILY_MATCH_DISABLED_CSS = "._matchList.disb"
@@ -49,10 +58,6 @@ class SoccerNight(object):
     BUTTON_SEASON_RESULT_NEXT_CLASS = "btn_p_pg2 next"
     BUTTON_SEASON_RESULT_OK_CLASS = "btn_p_ty1 wd63"
 
-    # Challenge to friend
-    CHALLENGE_FRIEND_CLASS = "rst clg"
-
-
     def __init__(self, id, pw):
         self.driver = webdriver.Chrome()
         self.wait = WebDriverWait(self.driver, 10)
@@ -65,10 +70,21 @@ class SoccerNight(object):
         elem.send_keys(pw)
         elem.send_keys(Keys.ENTER)
 
-        #TODO: Get reward from first login at home.
+        # First login today and get reward.
+        try:
+            elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
+            elem.click()
+            elem = self.driver.find_element_by_class_name(self.GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS)
+            elem.click()
+        except:
+            pass
 
     def close(self):
         self.driver.close()
+
+    def go_home(self):
+        self.driver.get("http://fd.naver.com/gmc/main#home")
+        #TODO: Read news and get rewards.
 
     def go_schedule(self, from_popup=False):
         if not from_popup:
