@@ -16,26 +16,33 @@ class SoccerNight(object):
     daily_match_remain = 5;
     world_tour_remain = 10;
 
-    BUTTON_CHECK_RESULT_CLASS = "btn_ty3"
-    POPUP_CONFIRM_ID = "a_popup_ok"
-
-    # Friendly match
     """ Caution!
     If we find element with find_elements_by_class_name, compound class names not permitted.
     So, FRIENDLY_ACTIVE_MATCH_CSS will be used with css selector. It is reliable way.
 
     Sometimes, javascript execution will be needed.
     """
-    FRIENDLY_ACTIVATED_MATCH_CSS = "._matchList"
-    FRIENDLY_DISABLED_MATCH_CSS = "._matchList.disb"
-    FRIENDLY_DISABLED_LAST_MATCH_CSS = "._matchList.last.disb"
-    BUTTON_RUN_FRIENDLY_MATCH_CSS = ".sp_dm.btn_chall.ty2"
+    # Common
+    BUTTON_CHECK_RESULT_CLASS = "btn_ty3"
+    POPUP_CONFIRM_ID = "a_popup_ok"
+
+    # Daily match
+    DAILY_MATCH_ACTIVATED_CSS = "._matchList"
+    DAILY_MATCH_DISABLED_CSS = "._matchList.disb"
+    DAILY_MATCH_LAST_DISABLED_CSS = "._matchList.last.disb"
+    BUTTON_RUN_DAILY_MATCH_CSS = ".sp_dm.btn_chall.ty2"
+
+    # World tour
+    BUTTON_RUN_WORLD_TOUR_CSS = ".sp_dm.btn_chall"
+
+    # Friendly common
+    GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS = "btn_p_ty6"
+    BUTTON_QUIT_MATCH_CLASS = "btn_out"
+
+    # In game
     MY_SCORE_JS = "return document.getElementsByClassName('score_r')[0].firstChild.firstChild.innerHTML"
     PC_SCORE_JS = "return document.getElementsByClassName('score_l')[0].firstChild.firstChild.innerHTML"
     PLAYING_TIME_XPATH = "//dl[@class='end_time']/dd"
-    BUTTON_QUIT_MATCH_CLASS = "btn_out"
-    # It is also attendance reward and world tour result.
-    GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS = "btn_p_ty6"
 
     # Season results
     BUTTON_SEASON_RESULT_NEXT_CLASS = "btn_p_pg2 next"
@@ -102,10 +109,10 @@ class SoccerNight(object):
 
         self.driver.get("http://fd.naver.com/gmc/main#dailymatch")
         try:
-            self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.FRIENDLY_ACTIVATED_MATCH_CSS)))
-            matches = self.driver.find_elements_by_css_selector(self.FRIENDLY_ACTIVATED_MATCH_CSS)
-            matches_disabled = self.driver.find_elements_by_css_selector(self.FRIENDLY_DISABLED_MATCH_CSS)
-            matches_disabled_last = self.driver.find_elements_by_css_selector(self.FRIENDLY_DISABLED_LAST_MATCH_CSS)
+            self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.DAILY_MATCH_ACTIVATED_CSS)))
+            matches = self.driver.find_elements_by_css_selector(self.DAILY_MATCH_ACTIVATED_CSS)
+            matches_disabled = self.driver.find_elements_by_css_selector(self.DAILY_MATCH_DISABLED_CSS)
+            matches_disabled_last = self.driver.find_elements_by_css_selector(self.DAILY_MATCH_LAST_DISABLED_CSS)
             for disabled in matches_disabled:
                 matches.remove(disabled)
             for disabled in matches_disabled_last:
@@ -120,7 +127,7 @@ class SoccerNight(object):
 
             for match in matches:
                 match.click()
-                self.driver.find_element_by_css_selector(self.BUTTON_RUN_FRIENDLY_MATCH_CSS).click()
+                self.driver.find_element_by_css_selector(self.BUTTON_RUN_DAILY_MATCH_CSS).click()
                 self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
                 if (self.confirm_league_match_results()):
                     return
