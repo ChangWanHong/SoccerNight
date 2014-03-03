@@ -167,13 +167,6 @@ class SoccerNight(object):
                             return
 
     def go_world_tour(self):
-        # For next nation popup. Reward for clearing nation.
-        try:
-            elem = self.driver.find_element_by_class_name(self.GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS)
-            elem.click()
-        except:
-            pass
-
         # FIXME: At 24 o'clock, we should refresh this.
         if (self.world_tour_remain == 0):
             return
@@ -212,6 +205,13 @@ class SoccerNight(object):
 
                 if (self.__confirm_friendly_match_result()):
                     self.daily_match_remain -= 1
+                    # For next nation popup. Reward for clearing nation.
+                    try:
+                        elem = self.driver.find_element_by_class_name(self.GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS)
+                        elem.click()
+                    except:
+                        pass
+
                     return
 
     # It will be used densly..
