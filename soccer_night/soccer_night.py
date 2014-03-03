@@ -14,6 +14,7 @@ class SoccerNight(object):
     driver = None
     wait = None
     daily_match_remain = 5;
+    world_tour_remain = 10;
 
     BUTTON_CHECK_RESULT_CLASS = "btn_ty3"
     POPUP_CONFIRM_ID = "a_popup_ok"
@@ -139,7 +140,14 @@ class SoccerNight(object):
                             return
 
     def go_world_tour(self):
+        # FIXME: At 24 o'clock, we should refresh this.
+        if (self.world_tour_remain == 0):
+            return
+
         self.driver.get("http://fd.naver.com/gmc/main#worldtour")
+        #self.driver.find_element_by_xpath("//div[@class='over']/span/a").click()
+        self.driver.find_element_by_css_selector(".over > span > a").click()
+        self.world_tour_remain = 0
         #TODO: Start world tour.
 
     # It will be used densly..

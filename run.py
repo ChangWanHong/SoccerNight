@@ -14,6 +14,7 @@ def main():
     while True:
         soccer.confirm_league_match_results()
         soccer.go_daily_match()
+        soccer.go_world_tour()
 
     soccer.close()
 if __name__ == '__main__':
