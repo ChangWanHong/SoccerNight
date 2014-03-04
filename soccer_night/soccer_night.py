@@ -65,6 +65,7 @@ class SoccerNight(object):
         elem.send_keys(pw)
         elem.send_keys(Keys.ENTER)
 
+        self.__confirm_league_match_results()
         #TODO: Get reward from first login at home.
 
     def close(self):
@@ -133,7 +134,7 @@ class SoccerNight(object):
                 match.click()
                 self.driver.find_element_by_css_selector(self.BUTTON_RUN_DAILY_MATCH_CSS).click()
                 self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
-                if (self.confirm_league_match_results()):
+                if (self.__confirm_league_match_results()):
                     return
 
                 while True:
@@ -174,7 +175,7 @@ class SoccerNight(object):
             button_run.click()
             self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
 
-        if (self.confirm_league_match_results()):
+        if (self.__confirm_league_match_results()):
             return
 
         while True:
@@ -199,7 +200,7 @@ class SoccerNight(object):
                     return
 
     # It will be used densly..
-    def confirm_league_match_results(self):
+    def __confirm_league_match_results(self):
         try:
             elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
         except:
