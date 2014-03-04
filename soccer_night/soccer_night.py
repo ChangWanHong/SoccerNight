@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -15,6 +16,8 @@ class SoccerNight(object):
     wait = None
     daily_match_remain = 5;
     world_tour_remain = 10;
+
+    is_challenge_to_friend_done = False
 
     """ Caution!
     If we find element with find_elements_by_class_name, compound class names not permitted.
@@ -50,8 +53,10 @@ class SoccerNight(object):
     BUTTON_SEASON_RESULT_OK_CLASS = "btn_p_ty1 wd63"
 
     # Challenge to friend
-    CHALLENGE_FRIEND_CLASS = "rst clg"
-
+    BUTTON_CHALLENGE_TO_FRIEND_CSS = "a.btn_game"
+    BUTTON_CLOSE_FRIEND_LIST_CSS = "a._layer_close"
+    BUTTON_OPEN_FRIEND_LIST_ID = "d_lnb_addfriend"
+    CHALLENGE_TO_FRIEND_RESULT_POPUP_CONFIRM_ID = "challengeMatchOK"
 
     def __init__(self, id, pw):
         self.driver = webdriver.Chrome()
@@ -198,6 +203,43 @@ class SoccerNight(object):
                         pass
 
                     return
+
+    def challenge_to_friend_if_not_done(self):
+        if self.is_challenge_to_friend_done:
+            return
+
+        self.driver.get("http://fd.naver.com/gmc/main#home")
+        if (self.__confirm_league_match_results()):
+            return
+
+        elem = self.driver.find_element_by_id(self.BUTTON_OPEN_FRIEND_LIST_ID)
+        elem.click()
+
+        # LIMIT: Arbitrary number expected to exceed the number of friends of
+        # any user, which prevents an infinite while loop on worst, unexpected cases.
+        LIMIT = 100
+        index = 0
+        while index < LIMIT:
+            # Prevent from popup which is shown when many requests send to server in short time.
+            time.sleep(1)
+            try:
+                elem = self.driver.find_element_by_css_selector(self.BUTTON_CHALLENGE_TO_FRIEND_CSS)
+                elem.click()
+            except NoSuchElementException:
+                elem = self.driver.find_element_by_css_selector(self.BUTTON_CLOSE_FRIEND_LIST_CSS)
+                elem.click()
+                self.is_challenge_to_friend_done = True
+                return
+            except:
+                return
+
+            try:
+                self.wait.until(expected_conditions.element_to_be_clickable((By.ID, self.CHALLENGE_TO_FRIEND_RESULT_POPUP_CONFIRM_ID)))
+                elem = self.driver.find_element_by_id(self.CHALLENGE_TO_FRIEND_RESULT_POPUP_CONFIRM_ID)
+                elem.click()
+            except:
+                return
+            index += 1
 
     # It will be used densly..
     def __confirm_league_match_results(self):
