@@ -12,6 +12,7 @@ def main():
     soccer = soccer_night.SoccerNight(id, pw)
 
     while True:
+        soccer.challenge_to_friend_if_not_done()
         soccer.go_daily_match()
         soccer.go_world_tour()
 
