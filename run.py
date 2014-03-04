@@ -12,6 +12,10 @@ def main():
     soccer = soccer_night.SoccerNight(id, pw)
 
     while True:
+        # reset state.
+        soccer.reset_when_new_date()
+
+        # functionality.
         soccer.challenge_to_friend_if_not_done()
         soccer.challenge_penalty_shoot_out()
         soccer.go_daily_match()

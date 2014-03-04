@@ -15,6 +15,8 @@ class SoccerNight(object):
 
     driver = None
     wait = None
+
+    day_of_week = None
     daily_match_remain = 5;
     world_tour_remain = 10;
     is_challenge_to_friend_done = False
@@ -81,6 +83,16 @@ class SoccerNight(object):
 
     def close(self):
         self.driver.close()
+
+    def reset_when_new_date(self):
+        if self.day_of_week == time.localtime().tm_wday:
+            return
+
+        self.day_of_week = time.localtime().tm_wday
+        self.daily_match_remain = 5;
+        self.world_tour_remain = 10;
+        self.is_challenge_to_friend_done = False
+        self.is_penalty_shoot_out_done = False
 
     def go_schedule(self, from_popup=False):
         if not from_popup:
@@ -296,5 +308,5 @@ class SoccerNight(object):
 
     # For leeds time card
     def __is_sunday(self):
-        return time.localtime().tm_wday == 6
+        return self.day_of_week == 6
 
