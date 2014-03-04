@@ -92,7 +92,7 @@ class SoccerNight(object):
                 pass
 
         # For leeds time card.
-        if (self.__is_sunday()):
+        if self.__is_sunday():
             try:
                 elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
             except:
@@ -120,7 +120,7 @@ class SoccerNight(object):
 
     def go_daily_match(self):
         # FIXME: At 24 o'clock, we should refresh this.
-        if (self.daily_match_remain == 0):
+        if self.daily_match_remain is 0:
             return
 
         self.driver.get("http://fd.naver.com/gmc/main#dailymatch")
@@ -145,26 +145,26 @@ class SoccerNight(object):
                 match.click()
                 self.driver.find_element_by_css_selector(self.BUTTON_RUN_DAILY_MATCH_CSS).click()
                 self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
-                if (self.__confirm_league_match_results()):
+                if self.__confirm_league_match_results():
                     return
 
                 while True:
                     playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
                     playingTime, _ = playingTimeText.split(":")
-                    if (int(playingTime) > 90):
-                        if (not self.__is_my_score_more_than_pc(1)):
+                    if int(playingTime) > 90:
+                        if not self.__is_my_score_more_than_pc(1):
                             # These clicks may not be needed because return statement makes it to enter daily match again.
                             self.driver.find_element_by_class_name(self.BUTTON_QUIT_MATCH_CLASS).click()
                             self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
                             return
 
-                        if (self.__confirm_friendly_match_result()):
+                        if self.__confirm_friendly_match_result():
                             self.daily_match_remain -= 1
                             return
 
     def go_world_tour(self):
         # FIXME: At 24 o'clock, we should refresh this.
-        if (self.world_tour_remain == 0):
+        if self.world_tour_remain is 0:
             return
 
         self.driver.get("http://fd.naver.com/gmc/main#worldtour")
@@ -186,20 +186,20 @@ class SoccerNight(object):
             button_run.click()
             self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
 
-        if (self.__confirm_league_match_results()):
+        if self.__confirm_league_match_results():
             return
 
         while True:
             playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
             playingTime, _ = playingTimeText.split(":")
-            if (int(playingTime) > 90):
-                if (not self.__is_my_score_more_than_pc(3)):
+            if int(playingTime) > 90:
+                if not self.__is_my_score_more_than_pc(3):
                     # These clicks may not be needed because return statement makes it to enter world tour again.
                     self.driver.find_element_by_class_name(self.BUTTON_QUIT_MATCH_CLASS).click()
                     self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
                     return
 
-                if (self.__confirm_friendly_match_result()):
+                if self.__confirm_friendly_match_result():
                     self.daily_match_remain -= 1
                     # For next nation popup. Reward for clearing nation.
                     try:
@@ -215,7 +215,7 @@ class SoccerNight(object):
             return
 
         self.driver.get("http://fd.naver.com/gmc/main#home")
-        if (self.__confirm_league_match_results()):
+        if self.__confirm_league_match_results():
             return
 
         elem = self.driver.find_element_by_id(self.BUTTON_OPEN_FRIEND_LIST_ID)
