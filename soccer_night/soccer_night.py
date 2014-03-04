@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 import time
+import re
 
 IMPLICITLY_WAIT_SECONDS = 2
 
@@ -16,8 +17,8 @@ class SoccerNight(object):
     wait = None
     daily_match_remain = 5;
     world_tour_remain = 10;
-
     is_challenge_to_friend_done = False
+    is_penalty_shoot_out_done = False
 
     """ Caution!
     If we find element with find_elements_by_class_name, compound class names not permitted.
@@ -57,6 +58,11 @@ class SoccerNight(object):
     BUTTON_CLOSE_FRIEND_LIST_CSS = "a._layer_close"
     BUTTON_OPEN_FRIEND_LIST_ID = "d_lnb_addfriend"
     CHALLENGE_TO_FRIEND_RESULT_POPUP_CONFIRM_ID = "challengeMatchOK"
+
+    # Challenge to penalty shoot out
+    BUTTON_NEXT_FRIEND_TO_SHOOT_OUT_ID = "head_shootout_btn"
+    BUTTON_RUN_SHOOT_OUT_ID = "club_shootout_btn"
+    NUMBER_REMAINED_FRIENDS_TO_SHOOT_OUT_CSS = "#head_shootout_btn > em"
 
     def __init__(self, id, pw):
         self.driver = webdriver.Chrome()
@@ -240,6 +246,26 @@ class SoccerNight(object):
             except:
                 return
             index += 1
+
+    def challenge_penalty_shoot_out(self):
+        if self.is_penalty_shoot_out_done:
+            return
+
+        while not self.is_penalty_shoot_out_done:
+            self.driver.get("http://fd.naver.com/club")
+            remained_string = self.driver.find_element_by_css_selector(self.NUMBER_REMAINED_FRIENDS_TO_SHOOT_OUT_CSS).text
+            remained, _ = map(int, re.findall(r'\d+', remained_string))
+
+            if remained is 0:
+                self.is_penalty_shoot_out_done = True
+                return
+
+            try:
+                self.driver.find_element_by_id(self.BUTTON_NEXT_FRIEND_TO_SHOOT_OUT_ID).click()
+                self.driver.find_element_by_id(self.BUTTON_RUN_SHOOT_OUT_ID).click()
+                time.sleep(1)
+            except:
+                pass
 
     # It will be used densly..
     def __confirm_league_match_results(self):
