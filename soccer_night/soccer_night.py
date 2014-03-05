@@ -24,9 +24,9 @@ class SoccerNight(object):
 
     """ Caution!
     If we find element with find_elements_by_class_name, compound class names not permitted.
-    So, FRIENDLY_ACTIVE_MATCH_CSS will be used with css selector. It is reliable way.
+    So, *_CSS will be used with css selector frequently. It is reliable way.
 
-    Sometimes, javascript execution will be needed.
+    Sometimes, javascript execution will be needed. (*_JS)
     """
     # Common
     BUTTON_CHECK_RESULT_CLASS = "btn_ty3"
