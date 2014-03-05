@@ -32,6 +32,7 @@ class SoccerNight(object):
     # Common
     BUTTON_CHECK_RESULT_CLASS = "btn_ty3"
     POPUP_CONFIRM_ID = "a_popup_ok"
+    BUTTON_ENTER_LIVE_LEAGUE_MATCH_CSS = ".btn_ty4"
     FINISH_LEAGUE_NEXT_PAGE_CSS = ".btn_p_pg2.nex"
     """ Get this with text. You get, for example, '/4' if you degrade from championship """
     FINISH_LEAGUE_REWARD_PLAYERS_YOU_CAN_CHOICE_XPATH = "//span[@class='num']/em"
@@ -130,7 +131,33 @@ class SoccerNight(object):
         for check_button in check_buttons:
             check_button.click()
 
-        #TODO: Foot ball time.
+    def go_football_time(self):
+        if not is_football_time():
+            return
+
+        self.go_schedule()
+        try:
+            elem = self.driver.find_element_by_css_selector(self.BUTTON_ENTER_LIVE_LEAGUE_MATCH_CSS)
+        except:
+            pass
+        else:
+            elem.click()
+
+        while True:
+            # wait for game end and confirm popup
+            try:
+                elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
+                elem.click()
+                time.sleep(2)
+                elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
+                elem.click()
+                time.sleep(2)
+                elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
+                elem.click()
+            except:
+                pass
+            else:
+                return
 
     def go_item(self):
         self.driver.get("http://fd.naver.com/gmc/main#item")
@@ -319,4 +346,17 @@ class SoccerNight(object):
     # For leeds time card
     def __is_sunday(self):
         return self.day_of_week == 6
+
+# Utilities. static method.
+def is_football_time():
+    # We enter football time during "13:55 ~ 14:05" and "21:55 ~ 22:05".
+    # because the longest time of a functionality is in the match. We assume
+    # it's 7 minutes.
+    if (((time.localtime().tm_hour is 14 and time.localtime().tm_min < 5)
+        or (time.localtime().tm_hour is 13 and time.localtime().tm_min > 55))
+        or ((time.localtime().tm_hour is 22 and time.localtime().tm_min < 5)
+        or (time.localtime().tm_hour is 21 and time.localtime().tm_min > 55))):
+        return True
+
+    return False
 
