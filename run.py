@@ -1,6 +1,8 @@
 #!/usr/bin/python
 import os, sys
 sys.path.append(os.path.join(os.getcwd(), "soccer_night"))
+# FIXME: For release.. it's ugly.
+os.environ["PATH"] += os.pathsep + os.getcwd()
 
 import soccer_night
 from getpass import getpass
