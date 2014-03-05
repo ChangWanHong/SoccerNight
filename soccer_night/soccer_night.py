@@ -41,6 +41,7 @@ class SoccerNight(object):
     # World tour
     BUTTON_WORLD_TOUR_NATION_IN_PROGRESS_CSS = ".over > span > a"
     BUTTON_RUN_WORLD_TOUR_ID = "a_wt_challengebtn"
+    BUTTON_NATION_CLEAR_REWARD_CSS = ".btn_p_ty6._btnNationClear"
 
     # Friendly common
     GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS = "btn_p_ty6"
@@ -215,7 +216,9 @@ class SoccerNight(object):
                     self.daily_match_remain -= 1
                     # For next nation popup. Reward for clearing nation.
                     try:
-                        elem = self.driver.find_element_by_class_name(self.GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS)
+                        elem = self.driver.find_element_by_css_selector(self.BUTTON_NATION_CLEAR_REWARD_CSS)
+                        elem.click()
+                        elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
                         elem.click()
                     except:
                         pass
