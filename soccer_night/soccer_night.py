@@ -35,7 +35,6 @@ class SoccerNight(object):
     # Daily match
     DAILY_MATCH_ACTIVATED_CSS = "._matchList"
     DAILY_MATCH_DISABLED_CSS = "._matchList.disb"
-    DAILY_MATCH_LAST_DISABLED_CSS = "._matchList.last.disb"
     BUTTON_RUN_DAILY_MATCH_CSS = ".sp_dm.btn_chall.ty2"
 
     # World tour
@@ -141,10 +140,7 @@ class SoccerNight(object):
             self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.DAILY_MATCH_ACTIVATED_CSS)))
             matches = self.driver.find_elements_by_css_selector(self.DAILY_MATCH_ACTIVATED_CSS)
             matches_disabled = self.driver.find_elements_by_css_selector(self.DAILY_MATCH_DISABLED_CSS)
-            matches_disabled_last = self.driver.find_elements_by_css_selector(self.DAILY_MATCH_LAST_DISABLED_CSS)
             for disabled in matches_disabled:
-                matches.remove(disabled)
-            for disabled in matches_disabled_last:
                 matches.remove(disabled)
         except:
             self.daily_match_remain = 0
