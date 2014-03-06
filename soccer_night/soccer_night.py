@@ -229,10 +229,6 @@ class SoccerNight(object):
         if self.is_challenge_to_friend_done:
             return
 
-        self.driver.get("http://fd.naver.com/gmc/main#home")
-        if self.__confirm_league_match_results():
-            return
-
         elem = self.driver.find_element_by_id(self.BUTTON_OPEN_FRIEND_LIST_ID)
         elem.click()
 
