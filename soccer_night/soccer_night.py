@@ -10,6 +10,7 @@ import time
 import re
 
 IMPLICITLY_WAIT_SECONDS = 2
+EXPLICITLY_WAIT_SECONDS = 5
 
 class SoccerNight(object):
 
@@ -68,7 +69,7 @@ class SoccerNight(object):
 
     def __init__(self, id, pw):
         self.driver = webdriver.Chrome()
-        self.wait = WebDriverWait(self.driver, 10)
+        self.wait = WebDriverWait(self.driver, EXPLICITLY_WAIT_SECONDS)
         self.driver.implicitly_wait(IMPLICITLY_WAIT_SECONDS)
         self.driver.get("http://fd.naver.com/gmc/main#home")
 
