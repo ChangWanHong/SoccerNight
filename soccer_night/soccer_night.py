@@ -215,6 +215,7 @@ class SoccerNight(object):
                     self.daily_match_remain -= 1
                     # For next nation popup. Reward for clearing nation.
                     try:
+                        self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.BUTTON_NATION_CLEAR_REWARD_CSS)))
                         elem = self.driver.find_element_by_css_selector(self.BUTTON_NATION_CLEAR_REWARD_CSS)
                         elem.click()
                         elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
