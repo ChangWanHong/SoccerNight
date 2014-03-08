@@ -32,6 +32,17 @@ class SoccerNight(object):
     # Common
     BUTTON_CHECK_RESULT_CLASS = "btn_ty3"
     POPUP_CONFIRM_ID = "a_popup_ok"
+    FINISH_LEAGUE_NEXT_PAGE_SSS = ".btn_p_pg2.nex"
+    # FIXME: I don't know about xpath spec well... help me
+    """ Get this with text. You get, for example, '/4' if you degrade from championship """
+    FINISH_LEAGUE_REWARD_PLAYERS_YOU_CAN_CHOICE_XPATH = "//span[@class='num']/em"
+    FINISH_LEAGUE_REWARD_PLAYERS_XPATH = "//ul[@class='reward_p_list _plist']/li"
+
+    # Gifts and inventory
+    GIFTS_YOU_GOT_CLASS = "thumb"
+    BUTTON_GET_GIFT_ID = "gift_view_confirm_gift_button"
+    BUTTON_UNPACK_INVENTORY_ITEM_ID = "unpack_button"
+    BUTTON_CLOSE_WINDOW_UNPACKED_ITEM_CSS = ".btn_p_ty1.shop"
 
     # Daily match
     DAILY_MATCH_ACTIVATED_CSS = "._matchList"
