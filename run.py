@@ -16,11 +16,7 @@ def main():
         soccer.reset_when_new_date()
 
         # functionality.
-        soccer.challenge_to_friend_if_not_done()
-        soccer.challenge_penalty_shoot_out()
-        soccer.go_football_time()
-        soccer.go_daily_match()
-        soccer.go_world_tour()
+        soccer.go_lineup()
 
     soccer.close()
 if __name__ == '__main__':

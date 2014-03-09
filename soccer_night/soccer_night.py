@@ -18,6 +18,7 @@ class SoccerNight(object):
     wait = None
 
     day_of_week = None
+    current_hour = -1;
     daily_match_remain = 5;
     world_tour_remain = 10;
     is_challenge_to_friend_done = False
@@ -77,6 +78,26 @@ class SoccerNight(object):
     BUTTON_NEXT_FRIEND_TO_SHOOT_OUT_ID = "head_shootout_btn"
     BUTTON_RUN_SHOOT_OUT_ID = "club_shootout_btn"
     NUMBER_REMAINED_FRIENDS_TO_SHOOT_OUT_CSS = "#head_shootout_btn > em"
+
+    # Squad
+    """
+    At first time, when you turn on this application, it gets your starting members.
+    And we distinguish each players by image src. Isn't it elegant?
+    { "CSS": "image src" }
+    """
+    STARTING_PLAYER0_CSS = "#plr_num0 > div > span > img"
+    STARTING_PLAYER1_CSS = "#plr_num1 > div > span > img"
+    STARTING_PLAYER2_CSS = "#plr_num2 > div > span > img"
+    STARTING_PLAYER3_CSS = "#plr_num3 > div > span > img"
+    STARTING_PLAYER4_CSS = "#plr_num4 > div > span > img"
+    STARTING_PLAYER5_CSS = "#plr_num5 > div > span > img"
+    STARTING_PLAYER6_CSS = "#plr_num6 > div > span > img"
+    STARTING_PLAYER7_CSS = "#plr_num7 > div > span > img"
+    STARTING_PLAYER8_CSS = "#plr_num8 > div > span > img"
+    STARTING_PLAYER9_CSS = "#plr_num9 > div > span > img"
+    STARTING_PLAYER10_CSS = "#plr_num10 > div > span > img"
+    starting_players = { }
+    YANNIGANS_CSS = ".plr_lst > .card_wrap > div > .photo > .player > img"
 
     def __init__(self, id, pw):
         self.driver = webdriver.Chrome()
@@ -332,6 +353,34 @@ class SoccerNight(object):
             except:
                 pass
 
+    def go_lineup(self):
+        if self.current_hour == time.localtime().tm_hour or time.localtime().tm_min < 20 or time.localtime().tm_min > 40:
+            return
+
+        self.current_hour = time.localtime().tm_hour
+        self.driver.get("http://fd.naver.com/gmc/main#lineup")
+
+        if self.__confirm_league_match_results():
+            return
+
+        if len(self.starting_players) is 0:
+            self.starting_players = self.__get_starting_players()
+
+        current_starting_players = self.__get_starting_players()
+
+        keys = []
+        for key in current_starting_players.keys():
+            if self.starting_players[key] != current_starting_players[key]:
+                keys.add(key)
+
+        if len(keys) is 0:
+            return
+
+        # Because, there are youth in starting memebers, we should find original member in yannigans.
+        """ yanigan means second strings player """
+        yannigans = self.__get_yannigans()
+        for yannigans.
+
     # It will be used densly..
     def __confirm_league_match_results(self):
         try:
@@ -362,6 +411,27 @@ class SoccerNight(object):
     # For leeds time card
     def __is_sunday(self):
         return self.day_of_week == 6
+
+    def __get_starting_players(self):
+        # We just check one player.
+        self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.STARTING_PLAYER0_CSS)))
+        players_dict = { }
+        # FIXME: It seems ugly.
+        players_dict[self.STARTING_PLAYER0_CSS] = self.driver.find_element_by_css_selector(self.STARTING_PLAYER0_CSS).get_attribute("src")
+        players_dict[self.STARTING_PLAYER1_CSS] = self.driver.find_element_by_css_selector(self.STARTING_PLAYER1_CSS).get_attribute("src")
+        players_dict[self.STARTING_PLAYER2_CSS] = self.driver.find_element_by_css_selector(self.STARTING_PLAYER2_CSS).get_attribute("src")
+        players_dict[self.STARTING_PLAYER3_CSS] = self.driver.find_element_by_css_selector(self.STARTING_PLAYER3_CSS).get_attribute("src")
+        players_dict[self.STARTING_PLAYER4_CSS] = self.driver.find_element_by_css_selector(self.STARTING_PLAYER4_CSS).get_attribute("src")
+        players_dict[self.STARTING_PLAYER5_CSS] = self.driver.find_element_by_css_selector(self.STARTING_PLAYER5_CSS).get_attribute("src")
+        players_dict[self.STARTING_PLAYER6_CSS] = self.driver.find_element_by_css_selector(self.STARTING_PLAYER6_CSS).get_attribute("src")
+        players_dict[self.STARTING_PLAYER7_CSS] = self.driver.find_element_by_css_selector(self.STARTING_PLAYER7_CSS).get_attribute("src")
+        players_dict[self.STARTING_PLAYER8_CSS] = self.driver.find_element_by_css_selector(self.STARTING_PLAYER8_CSS).get_attribute("src")
+        players_dict[self.STARTING_PLAYER9_CSS] = self.driver.find_element_by_css_selector(self.STARTING_PLAYER9_CSS).get_attribute("src")
+        players_dict[self.STARTING_PLAYER10_CSS] = self.driver.find_element_by_css_selector(self.STARTING_PLAYER10_CSS).get_attribute("src")
+        return players_dict
+
+    def __get_yannigans(self):
+        return self.driver.find_elements_by_css_selector(self.YANNIGANS_CSS)
 
 # Utilities. static method.
 def is_football_time():
