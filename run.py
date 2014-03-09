@@ -22,6 +22,8 @@ def main():
         soccer.go_daily_match()
         soccer.go_football_time()
         soccer.go_world_tour()
+        # Not work.
+        #soccer.go_lineup()
 
     soccer.close()
 if __name__ == '__main__':
