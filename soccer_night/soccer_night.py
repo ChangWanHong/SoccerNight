@@ -155,7 +155,8 @@ class SoccerNight(object):
                 elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
                 elem.click()
             # FIXME: It is difficult to catch popup.. Force to exit this loop.
-                time.localtime().tm_min >= 8
+                if time.localtime().tm_min >= 8:
+                    return
             except:
                 pass
             else:
