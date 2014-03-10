@@ -92,7 +92,7 @@ class SoccerNight(object):
 
         # There is new division for showing "This game is for older than 15".
         # This division blocks to click button for checking match results.
-        time.sleep(4)
+        time.sleep(5)
         self.__confirm_league_match_results()
         #TODO: Get reward from first login at home.
 
