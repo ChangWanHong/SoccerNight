@@ -220,6 +220,8 @@ class SoccerNight(object):
         if self.world_tour_remain is 0:
             return
 
+        # Prevent alert. It was too fast.
+        time.sleep(2)
         self.driver.get("http://fd.naver.com/gmc/main#worldtour")
 
         # At, not first time in world tour, the nation selection is skipped.
