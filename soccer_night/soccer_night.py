@@ -180,6 +180,7 @@ class SoccerNight(object):
             return
 
         self.driver.get("http://fd.naver.com/gmc/main#dailymatch")
+        time.sleep(2)
         try:
             self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.DAILY_MATCH_ACTIVATED_CSS)))
             matches = self.driver.find_elements_by_css_selector(self.DAILY_MATCH_ACTIVATED_CSS)
