@@ -317,7 +317,7 @@ class SoccerNight(object):
             try:
                 self.driver.find_element_by_id(self.BUTTON_NEXT_FRIEND_TO_SHOOT_OUT_ID).click()
                 self.driver.find_element_by_id(self.BUTTON_RUN_SHOOT_OUT_ID).click()
-                time.sleep(1)
+                time.sleep(1.5)
             except:
                 pass
 
