@@ -143,6 +143,16 @@ class SoccerNight(object):
         else:
             elem.click()
 
+        # When it fails to enter live match.
+        try:
+            time.sleep(4)
+            elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
+            elem.click()
+            self.go_football_time()
+            return
+        except:
+            pass
+
         while True:
         # FIXME: It is difficult to catch popup.. Force to exit this loop.
             if time.localtime().tm_min >= 8:
@@ -205,7 +215,7 @@ class SoccerNight(object):
                 while True:
                     playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
                     playingTime, _ = playingTimeText.split(":")
-                    if int(playingTime) > 90:
+                    if int(playingTime) >= 90:
                         if not self.__is_my_score_more_than_pc(1):
                             # These clicks may not be needed because return statement makes it to enter daily match again.
                             self.driver.find_element_by_class_name(self.BUTTON_QUIT_MATCH_CLASS).click()
@@ -248,7 +258,7 @@ class SoccerNight(object):
         while True:
             playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
             playingTime, _ = playingTimeText.split(":")
-            if int(playingTime) > 90:
+            if int(playingTime) >= 90:
                 if not self.__is_my_score_more_than_pc(3):
                     # These clicks may not be needed because return statement makes it to enter world tour again.
                     self.driver.find_element_by_class_name(self.BUTTON_QUIT_MATCH_CLASS).click()
