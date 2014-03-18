@@ -343,12 +343,13 @@ class SoccerNight(object):
 
     def go_pvp(self):
         if (not self.user_want_to_pvp or self.daily_match_remain or self.world_tour_remain
-            or not self.is_challenge_to_friend_done or not self.is_penalty_shoot_out_done):
+            or not self.is_challenge_to_friend_done or not self.is_penalty_shoot_out_done
+            or not self.pvp_remain):
             return
 
         self.driver.get("http://fd.naver.com/gmc/main#pvp")
-        pvp_remain = int(self.driver.find_element_by_css_selector(self.NUMBER_REMAINED_PVP_CSS).text)
-        if pvp_remain is 0:
+        self.pvp_remain = int(self.driver.find_element_by_css_selector(self.NUMBER_REMAINED_PVP_CSS).text)
+        if self.pvp_remain is 0:
             return
 
         time.sleep(1)
