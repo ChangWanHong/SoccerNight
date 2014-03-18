@@ -154,7 +154,7 @@ class SoccerNight(object):
             pass
 
         while True:
-        # FIXME: It is difficult to catch popup.. Force to exit this loop.
+            # FIXME: It is difficult to catch popup.. Force to exit this loop.
             if time.localtime().tm_min >= 8:
                 return
             # wait for game end and confirm popup
@@ -185,7 +185,6 @@ class SoccerNight(object):
         #TODO: Open given items.
 
     def go_daily_match(self):
-        # FIXME: At 24 o'clock, we should refresh this.
         if self.daily_match_remain is 0:
             return
 
@@ -227,7 +226,6 @@ class SoccerNight(object):
                             return
 
     def go_world_tour(self):
-        # FIXME: At 24 o'clock, we should refresh this.
         if self.world_tour_remain is 0:
             return
 
