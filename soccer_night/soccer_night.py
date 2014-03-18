@@ -214,7 +214,7 @@ class SoccerNight(object):
                 while True:
                     playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
                     playingTime, _ = playingTimeText.split(":")
-                    if int(playingTime) >= 90:
+                    if int(playingTime) >= 89:
                         if not self.__is_my_score_more_than_pc(1):
                             # These clicks may not be needed because return statement makes it to enter daily match again.
                             self.driver.find_element_by_class_name(self.BUTTON_QUIT_MATCH_CLASS).click()
@@ -256,7 +256,7 @@ class SoccerNight(object):
         while True:
             playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
             playingTime, _ = playingTimeText.split(":")
-            if int(playingTime) >= 90:
+            if int(playingTime) >= 89:
                 if not self.__is_my_score_more_than_pc(3):
                     # These clicks may not be needed because return statement makes it to enter world tour again.
                     self.driver.find_element_by_class_name(self.BUTTON_QUIT_MATCH_CLASS).click()
