@@ -8,8 +8,9 @@ from getpass import getpass
 def main():
     id = raw_input("Enter id: ")
     pw = getpass()
+    pvp = raw_input("Do you want to pvp? [y/N]: ")
 
-    soccer = soccer_night.SoccerNight(id, pw)
+    soccer = soccer_night.SoccerNight(id, pw, pvp)
 
     while True:
         # reset state.
@@ -21,6 +22,7 @@ def main():
         soccer.go_football_time()
         soccer.go_daily_match()
         soccer.go_world_tour()
+        soccer.go_pvp()
 
     soccer.close()
 if __name__ == '__main__':

@@ -22,6 +22,8 @@ class SoccerNight(object):
     world_tour_remain = 10;
     is_challenge_to_friend_done = False
     is_penalty_shoot_out_done = False
+    pvp_remain = 10;
+    user_want_to_pvp = False
 
     """ Caution!
     If we find element with find_elements_by_class_name, compound class names not permitted.
@@ -78,7 +80,12 @@ class SoccerNight(object):
     BUTTON_RUN_SHOOT_OUT_ID = "club_shootout_btn"
     NUMBER_REMAINED_FRIENDS_TO_SHOOT_OUT_CSS = "#head_shootout_btn > em"
 
-    def __init__(self, id, pw):
+    # PVP
+    BUTTON_PVP_READY_CSS = ".btn_p_ty1.on"
+    BUTTON_PVP_START_FASTLY_CSS = ".btn.start"
+    NUMBER_REMAINED_PVP_CSS = ".pvp_schedule > em > strong"
+
+    def __init__(self, id, pw, pvp):
         self.driver = webdriver.Chrome()
         self.wait = WebDriverWait(self.driver, EXPLICITLY_WAIT_SECONDS)
         self.driver.implicitly_wait(IMPLICITLY_WAIT_SECONDS)
@@ -89,6 +96,8 @@ class SoccerNight(object):
         elem = self.driver.find_element_by_id("pw")
         elem.send_keys(pw)
         elem.send_keys(Keys.ENTER)
+        if pvp == "y" or pvp == "Y":
+            self.user_want_to_pvp = True
 
         # There is new division for showing "This game is for older than 15".
         # This division blocks to click button for checking match results.
@@ -108,6 +117,7 @@ class SoccerNight(object):
         self.world_tour_remain = 10;
         self.is_challenge_to_friend_done = False
         self.is_penalty_shoot_out_done = False
+        self.pvp_remain = 10;
 
     def go_schedule(self, from_popup=False):
         if not from_popup:
@@ -330,6 +340,56 @@ class SoccerNight(object):
                 time.sleep(1.5)
             except:
                 pass
+
+    def go_pvp(self):
+        if (not self.user_want_to_pvp or self.daily_match_remain or self.world_tour_remain
+            or not self.is_challenge_to_friend_done or not self.is_penalty_shoot_out_done):
+            return
+
+        self.driver.get("http://fd.naver.com/gmc/main#pvp")
+        pvp_remain = int(self.driver.find_element_by_css_selector(self.NUMBER_REMAINED_PVP_CSS).text)
+        if pvp_remain is 0:
+            return
+
+        time.sleep(1)
+        try:
+            elem = self.driver.find_element_by_css_selector(self.BUTTON_PVP_START_FASTLY_CSS)
+            elem.click()
+            time.sleep(1)
+            elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
+            elem.click()
+        except:
+            return
+        else:
+            if self.__confirm_friendly_match_result():
+                return
+
+            time.sleep(1)
+            # Ready.
+            try:
+                elem = self.driver.find_element_by_css_selector(self.BUTTON_PVP_READY_CSS)
+                elem.click()
+            except:
+                # Make room
+                try:
+                    elem = self.driver.find_element_by_css_selector(".btn_ty2")
+                    elem.click()
+                except:
+                    # If you fail to enter.
+                    elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
+                    elem.click()
+                    return
+                else:
+                    # Speculation time for making room and game.
+                    time.sleep(12)
+                    # Anyway, we do nothing here because game is started and
+                    # then you can out from game automatically.
+
+            # Play the pvp. Assume playing time is 8 mins and 20 secs. And wait
+            # to counterpart ready for 20 secs.
+            else:
+                time.sleep(8 * 60 + 40)
+
 
     # It will be used densly..
     def __confirm_league_match_results(self):
