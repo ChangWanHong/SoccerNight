@@ -83,6 +83,7 @@ class SoccerNight(object):
     # PVP
     BUTTON_PVP_READY_CSS = ".btn_p_ty1.on"
     BUTTON_PVP_START_FASTLY_CSS = ".btn.start"
+    BUTTON_PVP_MAKE_ROOM_CLASS = "btn_p_ty1"
     NUMBER_REMAINED_PVP_CSS = ".pvp_schedule > em > strong"
 
     def __init__(self, id, pw, pvp):
@@ -373,7 +374,7 @@ class SoccerNight(object):
             except:
                 # Make room
                 try:
-                    elem = self.driver.find_element_by_css_selector(".btn_ty2")
+                    elem = self.driver.find_element_by_class(self.BUTTON_PVP_MAKE_ROOM_CLASS)
                     elem.click()
                 except:
                     # If you fail to enter.
