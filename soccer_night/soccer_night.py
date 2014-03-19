@@ -374,6 +374,7 @@ class SoccerNight(object):
             except:
                 # Make room
                 try:
+                    time.sleep(1)
                     elem = self.driver.find_element_by_class(self.BUTTON_PVP_MAKE_ROOM_CLASS)
                     elem.click()
                 except:
