@@ -363,7 +363,7 @@ class SoccerNight(object):
         except:
             return
         else:
-            if self.__confirm_friendly_match_result():
+            if self.__confirm_league_match_results():
                 return
 
             time.sleep(1)
