@@ -379,8 +379,6 @@ class SoccerNight(object):
                     elem.click()
                 except:
                     # If you fail to enter.
-                    elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
-                    elem.click()
                     return
                 else:
                     # Speculation time for making room and game.
