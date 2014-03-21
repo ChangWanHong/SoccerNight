@@ -8,7 +8,7 @@ from getpass import getpass
 def main():
     id = raw_input("Enter id: ")
     pw = getpass()
-    pvp = raw_input("Do you want to pvp? [y/N]: ")
+    pvp = raw_input("Enable pvp? [y/N]: ")
 
     soccer = soccer_night.SoccerNight(id, pw, pvp)
 
