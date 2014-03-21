@@ -20,6 +20,7 @@ def main():
         soccer.challenge_penalty_shoot_out()
         soccer.go_football_time()
         soccer.go_daily_match()
+        soccer.go_football_time()
         soccer.go_world_tour()
 
     soccer.close()
