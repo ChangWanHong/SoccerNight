@@ -108,28 +108,32 @@ class SoccerNight(object):
     NUMBER_REMAINED_PVP_CSS = ".pvp_schedule > em > strong"
 
     # Item
-    CONDITION_AND_INJURY_PLAYER0_CSS = "#plr_num0 > div > .plr_cdt"
-    CONDITION_AND_INJURY_PLAYER1_CSS = "#plr_num1 > div > .plr_cdt"
-    CONDITION_AND_INJURY_PLAYER2_CSS = "#plr_num2 > div > .plr_cdt"
-    CONDITION_AND_INJURY_PLAYER3_CSS = "#plr_num3 > div > .plr_cdt"
-    CONDITION_AND_INJURY_PLAYER4_CSS = "#plr_num4 > div > .plr_cdt"
-    CONDITION_AND_INJURY_PLAYER5_CSS = "#plr_num5 > div > .plr_cdt"
-    CONDITION_AND_INJURY_PLAYER6_CSS = "#plr_num6 > div > .plr_cdt"
-    CONDITION_AND_INJURY_PLAYER7_CSS = "#plr_num7 > div > .plr_cdt"
-    CONDITION_AND_INJURY_PLAYER8_CSS = "#plr_num8 > div > .plr_cdt"
-    CONDITION_AND_INJURY_PLAYER9_CSS = "#plr_num9 > div > .plr_cdt"
-    CONDITION_AND_INJURY_PLAYER10_CSS = "#plr_num10 > div > .plr_cdt"
-    STAMINA_PLAYER0_CSS = "#plr_num0 > div > .point > span"
-    STAMINA_PLAYER1_CSS = "#plr_num0 > div > .point > span"
-    STAMINA_PLAYER2_CSS = "#plr_num0 > div > .point > span"
-    STAMINA_PLAYER3_CSS = "#plr_num0 > div > .point > span"
-    STAMINA_PLAYER4_CSS = "#plr_num0 > div > .point > span"
-    STAMINA_PLAYER5_CSS = "#plr_num0 > div > .point > span"
-    STAMINA_PLAYER6_CSS = "#plr_num0 > div > .point > span"
-    STAMINA_PLAYER7_CSS = "#plr_num0 > div > .point > span"
-    STAMINA_PLAYER8_CSS = "#plr_num0 > div > .point > span"
-    STAMINA_PLAYER9_CSS = "#plr_num0 > div > .point > span"
-    STAMINA_PLAYER10_CSS = "#plr_num0 > div > .point > span"
+    LIST_CONDITION_AND_INJURY_PLAYERS_CSS = ([
+        "#plr_num0 > div > .plr_cdt",
+        "#plr_num1 > div > .plr_cdt",
+        "#plr_num2 > div > .plr_cdt",
+        "#plr_num3 > div > .plr_cdt",
+        "#plr_num4 > div > .plr_cdt",
+        "#plr_num5 > div > .plr_cdt",
+        "#plr_num6 > div > .plr_cdt",
+        "#plr_num7 > div > .plr_cdt",
+        "#plr_num8 > div > .plr_cdt",
+        "#plr_num9 > div > .plr_cdt",
+        "#plr_num10 > div > .plr_cdt"])
+
+    LIST_STAMINA_PLAYERS_CSS = ([
+        "#plr_num0 > div > .point > span",
+        "#plr_num1 > div > .point > span",
+        "#plr_num2 > div > .point > span",
+        "#plr_num3 > div > .point > span",
+        "#plr_num4 > div > .point > span",
+        "#plr_num5 > div > .point > span",
+        "#plr_num6 > div > .point > span",
+        "#plr_num7 > div > .point > span",
+        "#plr_num8 > div > .point > span",
+        "#plr_num9 > div > .point > span",
+        "#plr_num10 > div > .point > span"])
+
 
     def __init__(self, id, pw, pvp):
         self.driver = webdriver.Chrome()
@@ -228,14 +232,35 @@ class SoccerNight(object):
             else:
                 return
 
+    once = False
     def go_item(self):
         # FIXME: Go lineup before this. And remove below 4 lines.
-        if self.current_hour == time.localtime().tm_hour or time.localtime().tm_min < 20 or time.localtime().tm_min > 40:
+        #if self.current_hour == time.localtime().tm_hour or time.localtime().tm_min < 20 or time.localtime().tm_min > 40:
+        #    return
+        #
+        #self.current_hour = time.localtime().tm_hour
+        if self.once:
             return
 
-        self.current_hour = time.localtime().tm_hour
+        self.once = True
 
         self.driver.get("http://fd.naver.com/gmc/main#item")
+
+        if self.__confirm_league_match_results():
+            return
+
+        for player in self.LIST_CONDITION_AND_INJURY_PLAYERS_CSS:
+            stringCondition = self.driver.find_element_by_css_selector(player).get_attribute("class")
+            stringInjury = self.driver.find_element_by_css_selector(player).get_attribute("data-injurycnt")
+            condition = map(int, re.findall(r'\d+', stringCondition))[0]
+            injury = map(int, re.findall(r'\d+', stringInjury))[0]
+            print("condition:", condition, "injury:", injury)
+
+        for player in self.LIST_STAMINA_PLAYERS_CSS:
+            stringStamina = self.driver.find_element_by_css_selector(player).get_attribute("style")
+            stamina = map(int, re.findall(r'\d+', stringStamina))[0]
+            print("stamina:", stamina)
+
 
     def go_gift(self):
         self.driver.get("http://fd.naver.com/gmc/main#gift")
