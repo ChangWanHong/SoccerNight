@@ -25,6 +25,9 @@ class SoccerNight(object):
     is_penalty_shoot_out_done = False
     pvp_remain = 10;
     user_want_to_pvp = False
+    user_stamina = None
+    user_condition = None
+    user_injury = False
 
     """ Caution!
     If we find element with find_elements_by_class_name, compound class names not permitted.
@@ -100,6 +103,18 @@ class SoccerNight(object):
     STARTING_PLAYER10_CSS = "#plr_num10 > div > span > img"
     starting_players = { }
     YANNIGANS_CSS = ".plr_lst > .card_wrap > div > .photo > .player > img"
+    LIST_STARTING_PLAYERS_CSS = ([
+        STARTING_PLAYER0_CSS,
+        STARTING_PLAYER1_CSS,
+        STARTING_PLAYER2_CSS,
+        STARTING_PLAYER3_CSS,
+        STARTING_PLAYER4_CSS,
+        STARTING_PLAYER5_CSS,
+        STARTING_PLAYER6_CSS,
+        STARTING_PLAYER7_CSS,
+        STARTING_PLAYER8_CSS,
+        STARTING_PLAYER9_CSS,
+        STARTING_PLAYER10_CSS])
 
     # PVP
     BUTTON_PVP_READY_CSS = ".btn_p_ty1.on"
@@ -108,6 +123,25 @@ class SoccerNight(object):
     NUMBER_REMAINED_PVP_CSS = ".pvp_schedule > em > strong"
 
     # Item
+    BUTTON_USE_ITEM_ID = "a_item_apply"
+    ITEM_DONATION_CERTIFICATION_CSS = "[data-id~=isitm_card_1]"
+    ITEM_SUPER_PASS_CSS = "[data-id~=isitm_card_2]"
+    ITEM_MULTI_VITAMIN_CSS = "[data-id~=isitm_con_1]"
+    ITEM_ADRENALIN_CSS = "[data-id~=isitm_con_max]"
+    ITEM_STRAWBERRY_GUM_CSS = "[data-id~=isitm_hp_20]"
+    ITEM_HONEY_DRINK_CSS = "[data-id~=isitm_hp_50]"
+    ITEM_RED_GINSENG_CSS = "[data-id~=isitm_hp_max]"
+    ITEM_EMERGENCY_KIT_CSS = "[data-id~=isitm_injury]"
+
+    NUMBER_ITEM_DONATION_CERTIFICATION_CSS = "[data-id~=isitm_card_1] > .pr_crd_num"
+    NUMBER_ITEM_SUPER_PASS_CSS = "[data-id~=isitm_card_2] > .pr_crd_num"
+    NUMBER_ITEM_MULTI_VITAMIN_CSS = "[data-id~=isitm_con_1] > .pr_crd_num"
+    NUMBER_ITEM_ADRENALIN_CSS = "[data-id~=isitm_con_max] > .pr_crd_num"
+    NUMBER_ITEM_STRAWBERRY_GUM_CSS = "[data-id~=isitm_hp_20] > .pr_crd_num"
+    NUMBER_ITEM_HONEY_DRINK_CSS = "[data-id~=isitm_hp_50] > .pr_crd_num"
+    NUMBER_ITEM_RED_GINSENG_CSS = "[data-id~=isitm_hp_max] > .pr_crd_num"
+    NUMBER_ITEM_EMERGENCY_KIT_CSS = "[data-id~=isitm_injury] > .pr_crd_num"
+
     LIST_CONDITION_AND_INJURY_PLAYERS_CSS = ([
         "#plr_num0 > div > .plr_cdt",
         "#plr_num1 > div > .plr_cdt",
@@ -134,8 +168,7 @@ class SoccerNight(object):
         "#plr_num9 > div > .point > span",
         "#plr_num10 > div > .point > span"])
 
-
-    def __init__(self, id, pw, pvp):
+    def __init__(self, id, pw, pvp, stamina, condition, injury):
         self.driver = webdriver.Chrome()
         self.wait = WebDriverWait(self.driver, EXPLICITLY_WAIT_SECONDS)
         self.driver.implicitly_wait(IMPLICITLY_WAIT_SECONDS)
@@ -148,6 +181,26 @@ class SoccerNight(object):
         elem.send_keys(Keys.ENTER)
         if pvp == "y" or pvp == "Y":
             self.user_want_to_pvp = True
+
+        try:
+            stamina_integer = int(stamina)
+        except:
+            pass
+        else:
+            if stamina_integer >= 0 and stamina_integer <= 100:
+                self.user_stamina = stamina_integer
+
+        try:
+            condition_integer = int(condition)
+        except:
+            pass
+        else:
+            if condition_integer >= 1 and condition_integer <=5:
+                self.user_condition = condition_integer
+
+        if injury == "y" or injury == "Y":
+            self.user_injury = injury
+
 
         # There is new division for showing "This game is for older than 15".
         # This division blocks to click button for checking match results.
@@ -244,22 +297,31 @@ class SoccerNight(object):
 
         self.once = True
 
+        if self.user_stamina == None and self.user_condition == None and not self.user_injury:
+            return
+
         self.driver.get("http://fd.naver.com/gmc/main#item")
 
         if self.__confirm_league_match_results():
             return
 
-        for player in self.LIST_CONDITION_AND_INJURY_PLAYERS_CSS:
-            stringCondition = self.driver.find_element_by_css_selector(player).get_attribute("class")
-            stringInjury = self.driver.find_element_by_css_selector(player).get_attribute("data-injurycnt")
+        index = 0
+        while index <= 10:
+            key = self.LIST_STAMINA_PLAYERS_CSS[index]
+            stringStamina = self.driver.find_element_by_css_selector(key).get_attribute("style")
+            stamina = map(int, re.findall(r'\d+', stringStamina))[0]
+            print("stamina:", stamina)
+            player = self.driver.find_element_by_css_selector(self.LIST_STARTING_PLAYERS_CSS[index])
+            self.__use_strawberry_gum(player, key, stamina)
+            index += 1
+
+        # TODO: fix like stamina.
+        for key in self.LIST_CONDITION_AND_INJURY_PLAYERS_CSS:
+            stringCondition = self.driver.find_element_by_css_selector(key).get_attribute("class")
+            stringInjury = self.driver.find_element_by_css_selector(key).get_attribute("data-injurycnt")
             condition = map(int, re.findall(r'\d+', stringCondition))[0]
             injury = map(int, re.findall(r'\d+', stringInjury))[0]
             print("condition:", condition, "injury:", injury)
-
-        for player in self.LIST_STAMINA_PLAYERS_CSS:
-            stringStamina = self.driver.find_element_by_css_selector(player).get_attribute("style")
-            stamina = map(int, re.findall(r'\d+', stringStamina))[0]
-            print("stamina:", stamina)
 
 
     def go_gift(self):
@@ -545,6 +607,31 @@ class SoccerNight(object):
 
     def __get_yannigans(self):
         return self.driver.find_elements_by_css_selector(self.YANNIGANS_CSS)
+
+    def __use_strawberry_gum(self, player, key, stamina):
+        if self.user_stamina == None or stamina > self.user_stamina:
+            return
+
+        try:
+            elem = self.driver.find_element_by_css_selector(self.ITEM_STRAWBERRY_GUM_CSS)
+        except:
+            print "You don't have strawberry gum!"
+            return
+        else:
+            elem.click()
+
+        player.click()
+        time.sleep(1)
+        elem = self.driver.find_element_by_id(self.BUTTON_USE_ITEM_ID)
+        elem.click()
+        time.sleep(2)
+        elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
+        elem.click()
+        time.sleep(2)
+        # recalculation stamina
+        stringStamina = self.driver.find_element_by_css_selector(key).get_attribute("style")
+        stamina = map(int, re.findall(r'\d+', stringStamina))[0]
+        self.__use_strawberry_gum(player, key, stamina)
 
 # Utilities. static method.
 def is_football_time():
