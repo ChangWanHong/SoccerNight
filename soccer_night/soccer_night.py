@@ -305,8 +305,7 @@ class SoccerNight(object):
         if self.__confirm_league_match_results():
             return
 
-        index = 0
-        while index <= 10:
+        for index in xrange(11):
             key = self.LIST_STAMINA_PLAYERS_CSS[index]
             stringStamina = self.driver.find_element_by_css_selector(key).get_attribute("style")
             stamina = map(int, re.findall(r'\d+', stringStamina))[0]
