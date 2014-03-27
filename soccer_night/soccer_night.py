@@ -130,7 +130,7 @@ class SoccerNight(object):
     ITEM_ADRENALIN_CSS = "[data-id~=isitm_con_max]"
     ITEM_STRAWBERRY_GUM_CSS = "[data-id~=isitm_hp_20]"
     ITEM_HONEY_DRINK_CSS = "[data-id~=isitm_hp_50]"
-    ITEM_RED_GINSENG_CSS = "[data-id~=isitm_hp_max]"
+    ITEM_RED_GINSENG_EXTRACT_CSS = "[data-id~=isitm_hp_max]"
     ITEM_EMERGENCY_KIT_CSS = "[data-id~=isitm_injury]"
 
     NUMBER_ITEM_DONATION_CERTIFICATION_CSS = "[data-id~=isitm_card_1] > .pr_crd_num"
@@ -139,7 +139,7 @@ class SoccerNight(object):
     NUMBER_ITEM_ADRENALIN_CSS = "[data-id~=isitm_con_max] > .pr_crd_num"
     NUMBER_ITEM_STRAWBERRY_GUM_CSS = "[data-id~=isitm_hp_20] > .pr_crd_num"
     NUMBER_ITEM_HONEY_DRINK_CSS = "[data-id~=isitm_hp_50] > .pr_crd_num"
-    NUMBER_ITEM_RED_GINSENG_CSS = "[data-id~=isitm_hp_max] > .pr_crd_num"
+    NUMBER_ITEM_RED_GINSENG_EXTRACT_CSS = "[data-id~=isitm_hp_max] > .pr_crd_num"
     NUMBER_ITEM_EMERGENCY_KIT_CSS = "[data-id~=isitm_injury] > .pr_crd_num"
 
     LIST_CONDITION_AND_INJURY_PLAYERS_CSS = ([
