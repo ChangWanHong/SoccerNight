@@ -285,6 +285,7 @@ class SoccerNight(object):
             else:
                 button_yes = self.driver.find_element_by_css_selector(self.BUTTON_WORLD_TOUR_NEXT_CONFIRM_CSS)
                 button_yes.click()
+                self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.BUTTON_WORLD_TOUR_NEXT_REWARD_CSS)))
                 button_yes = self.driver.find_element_by_css_selector(self.BUTTON_WORLD_TOUR_NEXT_REWARD_CSS)
                 button_yes.click()
                 self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
