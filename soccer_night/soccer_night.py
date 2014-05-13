@@ -34,6 +34,7 @@ class SoccerNight(object):
     """
     # Common
     BUTTON_CHECK_RESULT_CLASS = "btn_ty3"
+    BUTTON_CHECK_RESULT_LAST_CSS = "tr.last .btn_ty3"
     POPUP_CONFIRM_ID = "a_popup_ok"
     BUTTON_ENTER_LIVE_LEAGUE_MATCH_CSS = ".btn_ty4"
     FINISH_LEAGUE_NEXT_PAGE_CSS = ".btn_p_pg2.nex"
@@ -159,9 +160,19 @@ class SoccerNight(object):
             else:
                 elem.click()
 
+        result = self.driver.find_elements_by_css_selector(self.BUTTON_CHECK_RESULT_LAST_CSS)
+
+        last_match_done = False
+        if len(result):
+            last_match_done = True
+
         check_buttons = self.driver.find_elements_by_class_name(self.BUTTON_CHECK_RESULT_CLASS)
         for check_button in check_buttons:
             check_button.click()
+
+        if last_match_done:
+            time.sleep(1)
+            self.go_schedule()
 
     def go_football_time(self):
         if not is_football_time():
