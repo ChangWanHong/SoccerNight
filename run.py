@@ -6,9 +6,18 @@ import soccer_night
 from getpass import getpass
 
 def main():
-    id = raw_input("Enter id: ")
-    pw = getpass()
-    pvp = raw_input("Enable pvp? [y/N]: ")
+    if os.path.isfile("config.json"):
+        import simplejson as json
+        config = json.loads(open("config.json").read())
+        id = config['id']
+        pvp = ('n', 'y')[config['pvp']]
+        print "Enter id: %s"%(id)
+        print "Enable pvp? %s"%(pvp)
+        pw = getpass()
+    else:
+        id = raw_input("Enter id: ")
+        pw = getpass()
+        pvp = raw_input("Enable pvp? [y/N]: ")
 
     soccer = soccer_night.SoccerNight(id, pw, pvp)
 
