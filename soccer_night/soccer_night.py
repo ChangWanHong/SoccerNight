@@ -201,7 +201,7 @@ class SoccerNight(object):
 
         while True:
             # FIXME: It is difficult to catch popup.. Force to exit this loop.
-            if time.localtime().tm_min >= 8:
+            if time.localtime().tm_min >= 10:
                 return
             # wait for game end and confirm popup
             try:
