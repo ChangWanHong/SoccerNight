@@ -285,21 +285,25 @@ class SoccerNight(object):
             for nation in nations:
                 if nation.text != "CLEAR":
                     nation.click()
+
                     self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.BUTTON_WORLD_TOUR_AVAILABLE_CLUB_CSS)))
                     clubs = self.driver.find_elements_by_css_selector(self.BUTTON_WORLD_TOUR_AVAILABLE_CLUB_CSS)
+
+                    # Check challenge count.
+                    # FIXME: Wait for reading countText. Currenlty, above line waits BUTTON_WORLD_TOUR_AVAILABLE_CLUB_CSS.
+                    countText, _ = self.driver.find_element_by_css_selector(self.WORLD_TOUR_CHALLENGE_COUNT_CSS).text.split("/")
+                    if (countText == "(0"):
+                        self.world_tour_remain = 0
+                        break
+
                     for club in clubs:
                         club.click()
-                        countText, _ = self.driver.find_element_by_css_selector(self.WORLD_TOUR_CHALLENGE_COUNT_CSS).text.split("/")
-                        if (countText == "(0"):
-                            self.world_tour_remain = 0
-                        else:
-                            runButton = self.driver.find_element_by_css_selector(self.BUTTON_WORLD_TOUR_RUN_CSS)
-                            runButton.click()
-                            self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
-                            isInGame = True
+                        runButton = self.driver.find_element_by_css_selector(self.BUTTON_WORLD_TOUR_RUN_CSS)
+                        runButton.click()
+                        self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
+                        isInGame = True
+                        # Run just one game here.
                         break
-                    break
-            self.world_tour_remain = 0
         except:
             pass
 
