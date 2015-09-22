@@ -317,7 +317,7 @@ class SoccerNight(object):
                 playingTime, _ = playingTimeText.split(":")
                 if int(playingTime) >= 89:
                     # TODO: 3 for easy, 2 for normal and 1 for hard...
-                    if not self.__is_my_score_more_than_pc(2):
+                    if not self.__is_my_score_more_than_pc(1):
                         return
 
                     if self.__confirm_friendly_match_result():
