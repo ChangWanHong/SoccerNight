@@ -57,9 +57,6 @@ class SoccerNight(object):
     BUTTON_WORLD_TOUR_NATION_IN_PROGRESS_CSS = ".over > span > a"
     BUTTON_RUN_WORLD_TOUR_ID = "a_wt_challengebtn"
     BUTTON_NATION_CLEAR_REWARD_CSS = ".btn_p_ty6._btnNationClear"
-    BUTTON_WORLD_TOUR_NEXT_ID = "a_worldtour_nexting"
-    BUTTON_WORLD_TOUR_NEXT_CONFIRM_CSS = ".btn_p_ty1._btnAllClearNextYes"
-    BUTTON_WORLD_TOUR_NEXT_REWARD_CSS = ".btn_p_ty6._btnAllClearReward"
 
     # Friendly common
     GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS = "btn_p_ty6"
@@ -287,19 +284,7 @@ class SoccerNight(object):
             self.wait.until(expected_conditions.element_to_be_clickable((By.ID, self.BUTTON_RUN_WORLD_TOUR_ID)))
             button_run = self.driver.find_element_by_id(self.BUTTON_RUN_WORLD_TOUR_ID)
         except:
-            try:
-                # Clear all nations and clubs. Next worldtour.
-                button_next = self.driver.find_element_by_id(self.BUTTON_WORLD_TOUR_NEXT_ID)
-                button_next.click()
-            except:
-                self.world_tour_remain = 0
-            else:
-                button_yes = self.driver.find_element_by_css_selector(self.BUTTON_WORLD_TOUR_NEXT_CONFIRM_CSS)
-                button_yes.click()
-                self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.BUTTON_WORLD_TOUR_NEXT_REWARD_CSS)))
-                button_yes = self.driver.find_element_by_css_selector(self.BUTTON_WORLD_TOUR_NEXT_REWARD_CSS)
-                button_yes.click()
-                self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
+            self.world_tour_remain = 0
             return
         else:
             button_run.click()
