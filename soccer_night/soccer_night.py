@@ -58,6 +58,11 @@ class SoccerNight(object):
     BUTTON_RUN_WORLD_TOUR_ID = "a_wt_challengebtn"
     BUTTON_NATION_CLEAR_REWARD_CSS = ".btn_p_ty6._btnNationClear"
 
+    BUTTON_WORLD_TOUR_NATION_XPATH = "//*[@id='d_wt_worldmap']/div/div/span/span/em"
+    BUTTON_WORLD_TOUR_AVAILABLE_CLUB_CSS = "tr._teaminfo"
+    BUTTON_WORLD_TOUR_RUN_CSS = ".btn_w.challenge._challenge_btn"
+    WORLD_TOUR_CHALLENGE_COUNT_CSS = "._challenge_cnt"
+
     # Friendly common
     GET_REWARD_BUTTON_AFTER_FRIENDLY_CLASS = "btn_p_ty6"
     BUTTON_QUIT_MATCH_CLASS = "btn_out"
@@ -273,47 +278,46 @@ class SoccerNight(object):
         time.sleep(2)
         self.driver.get("http://fd.naver.com/gmc/main#worldtour")
 
-        # At, not first time in world tour, the nation selection is skipped.
-        # We are in page where club is chosen already.
+        isInGame = False
         try:
-            self.driver.find_element_by_css_selector(self.BUTTON_WORLD_TOUR_NATION_IN_PROGRESS_CSS).click()
+            self.wait.until(expected_conditions.element_to_be_clickable((By.XPATH, self.BUTTON_WORLD_TOUR_NATION_XPATH)))
+            nations = self.driver.find_elements_by_xpath(self.BUTTON_WORLD_TOUR_NATION_XPATH)
+            for nation in nations:
+                if nation.text != "CLEAR":
+                    nation.click()
+                    self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.BUTTON_WORLD_TOUR_AVAILABLE_CLUB_CSS)))
+                    clubs = self.driver.find_elements_by_css_selector(self.BUTTON_WORLD_TOUR_AVAILABLE_CLUB_CSS)
+                    for club in clubs:
+                        club.click()
+                        countText, _ = self.driver.find_element_by_css_selector(self.WORLD_TOUR_CHALLENGE_COUNT_CSS).text.split("/")
+                        if (countText == "(0"):
+                            self.world_tour_remain = 0
+                        else:
+                            runButton = self.driver.find_element_by_css_selector(self.BUTTON_WORLD_TOUR_RUN_CSS)
+                            runButton.click()
+                            self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
+                            isInGame = True
+                        break
+                    break
+            self.world_tour_remain = 0
         except:
             pass
 
-        try:
-            self.wait.until(expected_conditions.element_to_be_clickable((By.ID, self.BUTTON_RUN_WORLD_TOUR_ID)))
-            button_run = self.driver.find_element_by_id(self.BUTTON_RUN_WORLD_TOUR_ID)
-        except:
-            self.world_tour_remain = 0
-            return
-        else:
-            button_run.click()
-            self.driver.find_element_by_id(self.POPUP_CONFIRM_ID).click()
-
         if self.__confirm_league_match_results():
+            isInGame = False
             return
 
-        while True:
-            playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
-            playingTime, _ = playingTimeText.split(":")
-            if int(playingTime) >= 89:
-                if not self.__is_my_score_more_than_pc(3):
-                    return
+        if isInGame:
+            while True:
+                playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
+                playingTime, _ = playingTimeText.split(":")
+                if int(playingTime) >= 89:
+                    # TODO: 0 for easy, 1 for normal and 2 for hard.
+                    if not self.__is_my_score_more_than_pc(2):
+                        return
 
-                if self.__confirm_friendly_match_result():
-                    self.daily_match_remain -= 1
-                    # For next nation popup. Reward for clearing nation.
-                    try:
-                        time.sleep(2)
-                        self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.BUTTON_NATION_CLEAR_REWARD_CSS)))
-                        elem = self.driver.find_element_by_css_selector(self.BUTTON_NATION_CLEAR_REWARD_CSS)
-                        elem.click()
-                        elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
-                        elem.click()
-                    except:
-                        pass
-
-                    return
+                    if self.__confirm_friendly_match_result():
+                        return
 
     def challenge_to_friend_if_not_done(self):
         if self.is_challenge_to_friend_done:
