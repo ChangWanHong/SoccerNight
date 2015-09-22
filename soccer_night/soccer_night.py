@@ -312,7 +312,7 @@ class SoccerNight(object):
                 playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
                 playingTime, _ = playingTimeText.split(":")
                 if int(playingTime) >= 89:
-                    # TODO: 0 for easy, 1 for normal and 2 for hard.
+                    # TODO: 3 for easy, 2 for normal and 1 for hard...
                     if not self.__is_my_score_more_than_pc(2):
                         return
 
