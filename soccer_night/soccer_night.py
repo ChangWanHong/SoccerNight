@@ -58,7 +58,11 @@ class SoccerNight(object):
     BUTTON_RUN_WORLD_TOUR_ID = "a_wt_challengebtn"
     BUTTON_NATION_CLEAR_REWARD_CSS = ".btn_p_ty6._btnNationClear"
 
-    BUTTON_WORLD_TOUR_NATION_XPATH = "//*[@id='d_wt_worldmap']/div/div/span/span/em"
+    BUTTON_WORLD_TOUR_AVAILABLE_NATION_CSS = ".tip_box.ing"
+    EM_WROLD_TOUR_A_NATION_PRE_XPATH = "//*[@id='d_wt_worldmap']/div/div["
+    EM_WORLD_TOUR_A_NATION_POST_XPATH = "]/span/span/em"
+    BUTTON_WROLD_TOUR_A_NATION_PRE_XPATH = "//*[@id='d_wt_worldmap']/div/div["
+    BUTTON_WORLD_TOUR_A_NATION_POST_XPATH = "]/span/a"
     BUTTON_WORLD_TOUR_AVAILABLE_CLUB_CSS = "tr._teaminfo"
     BUTTON_WORLD_TOUR_RUN_CSS = ".btn_w.challenge._challenge_btn"
     WORLD_TOUR_CHALLENGE_COUNT_CSS = "._challenge_cnt"
@@ -280,10 +284,11 @@ class SoccerNight(object):
 
         isInGame = False
         try:
-            self.wait.until(expected_conditions.element_to_be_clickable((By.XPATH, self.BUTTON_WORLD_TOUR_NATION_XPATH)))
-            nations = self.driver.find_elements_by_xpath(self.BUTTON_WORLD_TOUR_NATION_XPATH)
-            for nation in nations:
-                if nation.text != "CLEAR":
+            self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.BUTTON_WORLD_TOUR_AVAILABLE_NATION_CSS)))
+            for nationIndex in range(1, 8): # Nation indices are 1, ..., 7
+                nationEM = self.driver.find_element_by_xpath(self.EM_WROLD_TOUR_A_NATION_PRE_XPATH + str(nationIndex) + self.EM_WORLD_TOUR_A_NATION_POST_XPATH)
+                if (nationEM.text != "CLEAR"):
+                    nation = self.driver.find_element_by_xpath(self.BUTTON_WROLD_TOUR_A_NATION_PRE_XPATH + str(nationIndex) + self.BUTTON_WORLD_TOUR_A_NATION_POST_XPATH)
                     nation.click()
 
                     self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.BUTTON_WORLD_TOUR_AVAILABLE_CLUB_CSS)))
@@ -291,10 +296,16 @@ class SoccerNight(object):
 
                     # Check challenge count.
                     # FIXME: Wait for reading countText. Currenlty, above line waits BUTTON_WORLD_TOUR_AVAILABLE_CLUB_CSS.
-                    countText, _ = self.driver.find_element_by_css_selector(self.WORLD_TOUR_CHALLENGE_COUNT_CSS).text.split("/")
-                    if (countText == "(0"):
+                    try:
+                        countText, _ = self.driver.find_element_by_css_selector(self.WORLD_TOUR_CHALLENGE_COUNT_CSS).text.split("/")
+                        if (countText == "(0"):
+                            self.world_tour_remain = 0
+                            break
+                    except:
+                        # FIXME: Currntly, catch exception for no element. Below element is shown.
+                        # <span class="btn_w remain">다음 도전까지 남은 시간<em>02:57</em></span>
                         self.world_tour_remain = 0
-                        break
+                        pass
 
                     for club in clubs:
                         club.click()
@@ -304,7 +315,8 @@ class SoccerNight(object):
                         isInGame = True
                         # Run just one game here.
                         break
-        except:
+                    break
+        except Exception as inst:
             pass
 
         if self.__confirm_league_match_results():
