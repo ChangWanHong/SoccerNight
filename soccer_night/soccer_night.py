@@ -266,7 +266,7 @@ class SoccerNight(object):
                 while True:
                     playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
                     playingTime, _ = playingTimeText.split(":")
-                    if int(playingTime) >= 89:
+                    if int(playingTime) >= 90:
                         if not self.__is_my_score_more_than_pc(1):
                             return
 
@@ -327,7 +327,7 @@ class SoccerNight(object):
             while True:
                 playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
                 playingTime, _ = playingTimeText.split(":")
-                if int(playingTime) >= 89:
+                if int(playingTime) >= 90:
                     # TODO: 3 for easy, 2 for normal and 1 for hard...
                     if not self.__is_my_score_more_than_pc(3):
                         return
