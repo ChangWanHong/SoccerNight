@@ -263,6 +263,7 @@ class SoccerNight(object):
                 if self.__confirm_league_match_results():
                     return
 
+                startTime = time.time()
                 while True:
                     playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
                     playingTime, _ = playingTimeText.split(":")
@@ -273,6 +274,13 @@ class SoccerNight(object):
                         if self.__confirm_friendly_match_result():
                             self.daily_match_remain -= 1
                             return
+
+                    # Sometimes, it wait a long time, cause of network..
+                    endTime = time.time()
+                    timeTaken = endTime - startTime
+                    minutes, _ = divmod(timeTaken, 3600 * 60)
+                    if minutes >= 10:
+                        return
 
     def go_world_tour(self):
         if self.world_tour_remain is 0:
@@ -324,6 +332,7 @@ class SoccerNight(object):
             return
 
         if isInGame:
+            startTime = time.time()
             while True:
                 playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
                 playingTime, _ = playingTimeText.split(":")
@@ -333,6 +342,13 @@ class SoccerNight(object):
                         return
 
                     if self.__confirm_friendly_match_result():
+                        return
+
+                    # Sometimes, it wait a long time, cause of network..
+                    endTime = time.time()
+                    timeTaken = endTime - startTime
+                    minutes, _ = divmod(timeTaken, 3600 * 60)
+                    if minutes >= 10:
                         return
 
     def challenge_to_friend_if_not_done(self):
