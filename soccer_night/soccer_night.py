@@ -214,13 +214,14 @@ class SoccerNight(object):
             if time.localtime().tm_min >= 10:
                 return
 
-            if (me != int(self.driver.execute_script(self.MY_SCORE_JS)) or pc != int(self.driver.execute_script(self.PC_SCORE_JS))):
-                me = int(self.driver.execute_script(self.MY_SCORE_JS))
-                pc = int(self.driver.execute_script(self.PC_SCORE_JS))
-                print "Football Time [ " + str(me) + " : " + str(pc) + " ] " + str(datetime.now())
-
             # wait for game end and confirm popup
             try:
+                playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
+                if (me != int(self.driver.execute_script(self.MY_SCORE_JS)) or pc != int(self.driver.execute_script(self.PC_SCORE_JS))):
+                    me = int(self.driver.execute_script(self.MY_SCORE_JS))
+                    pc = int(self.driver.execute_script(self.PC_SCORE_JS))
+                    print "Football Time [ " + str(me) + " : " + str(pc) + " ] " + playingTimeText + " " + str(datetime.now())
+
                 elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
                 elem.click()
                 time.sleep(2)
@@ -298,7 +299,7 @@ class SoccerNight(object):
                     if (me != int(self.driver.execute_script(self.MY_SCORE_JS)) or pc != int(self.driver.execute_script(self.PC_SCORE_JS))):
                         me = int(self.driver.execute_script(self.MY_SCORE_JS))
                         pc = int(self.driver.execute_script(self.PC_SCORE_JS))
-                        print "Daily Match [ " + str(me) + " : " + str(pc) + " ] " + str(datetime.now())
+                        print "Daily Match [ " + str(me) + " : " + str(pc) + " ] " + playingTimeText + " " + str(datetime.now())
 
     def go_world_tour(self):
         if self.world_tour_remain is 0:
@@ -375,7 +376,7 @@ class SoccerNight(object):
                 if (me != int(self.driver.execute_script(self.MY_SCORE_JS)) or pc != int(self.driver.execute_script(self.PC_SCORE_JS))):
                     me = int(self.driver.execute_script(self.MY_SCORE_JS))
                     pc = int(self.driver.execute_script(self.PC_SCORE_JS))
-                    print "World Tour [ " + str(me) + " : " + str(pc) + " ] " + str(datetime.now())
+                    print "World Tour [ " + str(me) + " : " + str(pc) + " ] " + playingTimeText + " " + str(datetime.now())
 
     def challenge_to_friend_if_not_done(self):
         if self.is_challenge_to_friend_done:
