@@ -8,6 +8,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 import time
 import re
+from datetime import datetime
 
 IMPLICITLY_WAIT_SECONDS = 2
 EXPLICITLY_WAIT_SECONDS = 5
@@ -205,10 +206,19 @@ class SoccerNight(object):
         except:
             pass
 
+        me = 0
+        pc = 0
+        print "Football Time [ " + str(me) + " : " + str(pc) + " ] " + str(datetime.now())
         while True:
             # FIXME: It is difficult to catch popup.. Force to exit this loop.
             if time.localtime().tm_min >= 10:
                 return
+
+            if (me != int(self.driver.execute_script(self.MY_SCORE_JS)) or pc != int(self.driver.execute_script(self.PC_SCORE_JS))):
+                me = int(self.driver.execute_script(self.MY_SCORE_JS))
+                pc = int(self.driver.execute_script(self.PC_SCORE_JS))
+                print "Football Time [ " + str(me) + " : " + str(pc) + " ] " + str(datetime.now())
+
             # wait for game end and confirm popup
             try:
                 elem = self.driver.find_element_by_id(self.POPUP_CONFIRM_ID)
@@ -264,6 +274,9 @@ class SoccerNight(object):
                     return
 
                 startTime = time.time()
+                me = 0
+                pc = 0
+                print "Daily Match [ " + str(me) + " : " + str(pc) + " ] " + str(datetime.now())
                 while True:
                     playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
                     playingTime, _ = playingTimeText.split(":")
@@ -281,6 +294,11 @@ class SoccerNight(object):
                     minutes, _ = divmod(timeTaken, 3600 * 60)
                     if minutes >= 10:
                         return
+
+                    if (me != int(self.driver.execute_script(self.MY_SCORE_JS)) or pc != int(self.driver.execute_script(self.PC_SCORE_JS))):
+                        me = int(self.driver.execute_script(self.MY_SCORE_JS))
+                        pc = int(self.driver.execute_script(self.PC_SCORE_JS))
+                        print "Daily Match [ " + str(me) + " : " + str(pc) + " ] " + str(datetime.now())
 
     def go_world_tour(self):
         if self.world_tour_remain is 0:
@@ -333,6 +351,9 @@ class SoccerNight(object):
 
         if isInGame:
             startTime = time.time()
+            me = 0
+            pc = 0
+            print "World Tour [ " + str(me) + " : " + str(pc) + " ] " + str(datetime.now())
             while True:
                 playingTimeText = self.driver.find_element_by_xpath(self.PLAYING_TIME_XPATH).text
                 playingTime, _ = playingTimeText.split(":")
@@ -350,6 +371,11 @@ class SoccerNight(object):
                     minutes, _ = divmod(timeTaken, 3600 * 60)
                     if minutes >= 10:
                         return
+
+                if (me != int(self.driver.execute_script(self.MY_SCORE_JS)) or pc != int(self.driver.execute_script(self.PC_SCORE_JS))):
+                    me = int(self.driver.execute_script(self.MY_SCORE_JS))
+                    pc = int(self.driver.execute_script(self.PC_SCORE_JS))
+                    print "World Tour [ " + str(me) + " : " + str(pc) + " ] " + str(datetime.now())
 
     def challenge_to_friend_if_not_done(self):
         if self.is_challenge_to_friend_done:
