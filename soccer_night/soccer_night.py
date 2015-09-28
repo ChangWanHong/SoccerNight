@@ -211,7 +211,7 @@ class SoccerNight(object):
         print "Football Time [ " + str(me) + " : " + str(pc) + " ] " + str(datetime.now())
         while True:
             # FIXME: It is difficult to catch popup.. Force to exit this loop.
-            if time.localtime().tm_min >= 10:
+            if time.localtime().tm_min >= 10 and time.localtime().tm_min <= 20:
                 return
 
             # wait for game end and confirm popup
