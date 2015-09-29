@@ -366,12 +366,12 @@ class SoccerNight(object):
                     if self.__confirm_friendly_match_result():
                         return
 
-                    # Sometimes, it wait a long time, cause of network..
-                    endTime = time.time()
-                    timeTaken = endTime - startTime
-                    minutes, _ = divmod(timeTaken, 3600 * 60)
-                    if minutes >= 10:
-                        return
+                # Sometimes, it wait a long time, cause of network..
+                endTime = time.time()
+                timeTaken = endTime - startTime
+                minutes, _ = divmod(timeTaken, 3600 * 60)
+                if minutes >= 10:
+                    return
 
                 if (me != int(self.driver.execute_script(self.MY_SCORE_JS)) or pc != int(self.driver.execute_script(self.PC_SCORE_JS))):
                     me = int(self.driver.execute_script(self.MY_SCORE_JS))
