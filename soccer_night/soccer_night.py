@@ -342,9 +342,6 @@ class SoccerNight(object):
                         break
                     break
         except Exception as inst:
-            # No nations to challenge.
-            print "No nations to challenge."
-            self.world_tour_remain = 0
             pass
 
         if self.__confirm_league_match_results():
