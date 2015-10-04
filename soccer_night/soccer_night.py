@@ -59,7 +59,6 @@ class SoccerNight(object):
     BUTTON_RUN_WORLD_TOUR_ID = "a_wt_challengebtn"
     BUTTON_NATION_CLEAR_REWARD_CSS = ".btn_p_ty6._btnNationClear"
 
-    BUTTON_WORLD_TOUR_AVAILABLE_NATION_CSS = ".tip_box.ing"
     EM_WROLD_TOUR_A_NATION_PRE_XPATH = "//*[@id='d_wt_worldmap']/div/div["
     EM_WORLD_TOUR_A_NATION_POST_XPATH = "]/span/span/em"
     BUTTON_WROLD_TOUR_A_NATION_PRE_XPATH = "//*[@id='d_wt_worldmap']/div/div["
@@ -311,7 +310,6 @@ class SoccerNight(object):
 
         isInGame = False
         try:
-            self.wait.until(expected_conditions.element_to_be_clickable((By.CSS_SELECTOR, self.BUTTON_WORLD_TOUR_AVAILABLE_NATION_CSS)))
             for nationIndex in range(1, 8): # Nation indices are 1, ..., 7
                 nationEM = self.driver.find_element_by_xpath(self.EM_WROLD_TOUR_A_NATION_PRE_XPATH + str(nationIndex) + self.EM_WORLD_TOUR_A_NATION_POST_XPATH)
                 if (nationEM.text != "CLEAR"):
@@ -345,6 +343,7 @@ class SoccerNight(object):
                     break
         except Exception as inst:
             # No nations to challenge.
+            print "No nations to challenge."
             self.world_tour_remain = 0
             pass
 
