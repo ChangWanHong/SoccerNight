@@ -341,6 +341,8 @@ class SoccerNight(object):
                         # Run just one game here.
                         break
                     break
+            # End for statement. No nations to challenge.
+            self.world_tour_remain = 0
         except Exception as inst:
             pass
 
