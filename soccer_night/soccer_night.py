@@ -342,7 +342,7 @@ class SoccerNight(object):
                         break
                     break
             # End for statement. No nations to challenge.
-            self.world_tour_remain = 0
+            # self.world_tour_remain = 0
         except Exception as inst:
             pass
 
